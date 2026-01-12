@@ -86,3 +86,23 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+.idea/AndroidProjectSystem.xml
+
+.idea/code_sight_state.xml
+
+.idea/compiler.xml
+
+.idea/copilot.data.migration.ask.xml
+
+.idea/copilot.data.migration.ask2agent.xml
+
+.idea/deploymentTargetSelector.xml
+
+.idea/markdown.xml
+
+.idea/migrations.xml
+
+.idea/misc.xml
+
+.idea/runConfigurations.xml
