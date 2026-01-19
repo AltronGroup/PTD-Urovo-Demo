@@ -64,6 +64,7 @@ public class PrinterActivity extends AppCompatActivity {
                 "The Fox Jumps Over the Rope\n" ;
 
         String[] texts = ((String) sTestString).split("\n");   //Split print content into multiple lines
+        printerManager.clearPage();
         for (String text : texts) {
             height += printerManager.drawText(text, 0, height, fontName, fontSize, false, false, 0);   //Printed text
         }
@@ -71,7 +72,15 @@ public class PrinterActivity extends AppCompatActivity {
             height += printerManager.drawTextEx(text, 5, height, 384, -1, fontName, fontSize, 0, fontStyle, 0);   ////Printed text
         }
         int iResult = printerManager.printPage(0);
-        printerManager.paperFeed(16);
+        while (printerManager.getStatus() == PrinterManager.PRNSTS_BUSY) {
+            // Wait for printing to complete
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Print text interrupted: " + e.getMessage());
+            }
+        }
+        printerManager.paperFeed(50);
     }
 
     public void onImageClick(View view) {
@@ -119,9 +128,16 @@ public class PrinterActivity extends AppCompatActivity {
 
     public void printBitmap(Bitmap bitmap) {
         try {
+            printerManager.clearPage();
             printerManager.setupPage(384, -1);
             printerManager.drawBitmap(bitmap, 0, 0);
             printerManager.printPage(0);
+            while (printerManager.getStatus() == PrinterManager.PRNSTS_BUSY) {
+                // Wait for printing to complete
+                Thread.sleep(100);
+            }
+            Thread.sleep(200);
+            printerManager.paperFeed(200);
         } catch (Exception e) {
             Log.e(TAG, "Print bitmap error: " + e.getMessage());
         }
@@ -160,9 +176,16 @@ public class PrinterActivity extends AppCompatActivity {
 
     public void printQr(Bitmap qrBitmap) {
         try {
+            printerManager.clearPage();
             printerManager.setupPage(384, -1); // 58mm printer width
             printerManager.drawBitmap(qrBitmap, 40, 0); // center-ish
             printerManager.printPage(0);
+            while (printerManager.getStatus() == PrinterManager.PRNSTS_BUSY) {
+                // Wait for printing to complete
+                Thread.sleep(100);
+            }
+            Thread.sleep(200);
+            printerManager.paperFeed(200);
         } catch (Exception e) {
             Log.e(TAG, "Print QR error: " + e.getMessage());
         }
