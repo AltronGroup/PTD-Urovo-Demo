@@ -15,6 +15,8 @@ import com.coldstone.urovocustomerdemo.sdk.UrovoManager;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    private boolean isScanner = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         UrovoManager urovoManager = UrovoManager.getInstance(this);
         if (!urovoManager.isScannerAvailable()) {
-            findViewById(R.id.btnScanner).setEnabled(false);
-            findViewById(R.id.btnScanner).setAlpha(0.4f);
+            isScanner = false;
+            //findViewById(R.id.btnScanner).setEnabled(false);
+            //findViewById(R.id.btnScanner).setAlpha(0.4f);
         }
         if (!urovoManager.isPrinterAvailable()) {
             findViewById(R.id.btnPrinter).setEnabled(false);
@@ -69,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onScannerClick(View view) {
+        Intent intent;
+        if (isScanner) {
+            intent = new Intent(MainActivity.this, ScannerActivity.class);
+        } else {
+            intent = new Intent(MainActivity.this, CameraActivity.class);
+        }
+        startActivity(intent);
     }
 
     public void onPrinterClick(View view) {
