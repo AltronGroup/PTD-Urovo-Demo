@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onDeviceManagerClick(View view) {
+        Intent intent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+        startActivity(intent);
     }
 
     public void onPiccClick(View view) {

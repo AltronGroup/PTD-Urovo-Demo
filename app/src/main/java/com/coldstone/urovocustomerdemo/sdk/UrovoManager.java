@@ -12,7 +12,6 @@ import android.util.Log;
 
 public class UrovoManager {
     private static UrovoManager instance;
-    private Context appContext;
 
     private DeviceManager mDevice;
 
@@ -26,7 +25,6 @@ public class UrovoManager {
     private static final String TAG = "UrovoManager";
 
     private UrovoManager(Context context) {
-        appContext = context.getApplicationContext();
         initSdk();
     }
 
