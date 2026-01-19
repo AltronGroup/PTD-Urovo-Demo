@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onPiccClick(View view) {
+        Intent intent = new Intent(MainActivity.this, NfcActivity.class);
+        startActivity(intent);
     }
 
     public void onMagClick(View view) {
