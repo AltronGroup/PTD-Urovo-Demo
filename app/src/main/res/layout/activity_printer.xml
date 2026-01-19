@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/printerLayout"
+    android:padding="24dp">
+
+    <!-- Heading -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Printer"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Text -->
+    <Button
+        android:id="@+id/btnText"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Text"
+        android:onClick="onTextClick"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Image -->
+    <Button
+        android:id="@+id/btnImage"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Image"
+        android:onClick="onImageClick"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- QR -->
+    <Button
+        android:id="@+id/btnQR"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="QR"
+        android:onClick="onQRClick"
+        android:layout_marginBottom="32dp"/>
+
+    <!-- Back -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:onClick="onBackClick"
+        android:text="Back"/>
+
+</LinearLayout>
