@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onMagClick(View view) {
+        Intent intent = new Intent(MainActivity.this, MagActivity.class);
+        startActivity(intent);
     }
 
     public void onIccClick(View view) {
