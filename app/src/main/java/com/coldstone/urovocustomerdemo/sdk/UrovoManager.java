@@ -16,7 +16,7 @@ public class UrovoManager {
     private DeviceManager mDevice;
 
     // Example SDK objects (names depend on Urovo SDK)
-    private ScanManager mScanManager;
+
     private PiccManager mPiccReader;
     private IccManager mIccReader;
     private MagManager mMagReader;
@@ -41,11 +41,7 @@ public class UrovoManager {
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize DeviceManager: " + e.getMessage());
         }
-        try {
-            mScanManager = new ScanManager();
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to initialize ScanManager: " + e.getMessage());
-        }
+
         try {
             mIccReader = new IccManager();
         } catch (Exception e) {
@@ -79,13 +75,6 @@ public class UrovoManager {
 
     public DeviceManager getDeviceManager() {
         return mDevice;
-    }
-
-    public boolean isScannerAvailable() {
-        return mScanManager != null;
-    }
-    public ScanManager getScanner() {
-        return mScanManager;
     }
 
     public boolean isPiccAvailable() {

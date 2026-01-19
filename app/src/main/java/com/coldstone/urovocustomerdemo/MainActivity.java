@@ -23,11 +23,6 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         UrovoManager urovoManager = UrovoManager.getInstance(this);
-        if (!urovoManager.isScannerAvailable()) {
-            isScanner = false;
-            //findViewById(R.id.btnScanner).setEnabled(false);
-            //findViewById(R.id.btnScanner).setAlpha(0.4f);
-        }
         if (!urovoManager.isPrinterAvailable()) {
             findViewById(R.id.btnPrinter).setEnabled(false);
             findViewById(R.id.btnPrinter).setAlpha(0.4f);
@@ -72,12 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onScannerClick(View view) {
-        Intent intent;
-        if (isScanner) {
-            intent = new Intent(MainActivity.this, ScannerActivity.class);
-        } else {
-            intent = new Intent(MainActivity.this, CameraActivity.class);
-        }
+        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
         startActivity(intent);
     }
 
