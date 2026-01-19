@@ -10,14 +10,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.coldstone.urovocustomerdemo.sdk.UrovoManager;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
+        UrovoManager urovoManager = UrovoManager.getInstance(this);
     }
 
     public void onInvokeClick(View view) {
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onPrinterClick(View view) {
+        Intent intent = new Intent(MainActivity.this, PrinterActivity.class);
+        startActivity(intent);
     }
 
     public void onExitClick(View view) {
