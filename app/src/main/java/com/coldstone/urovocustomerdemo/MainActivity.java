@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onIccClick(View view) {
+        Intent intent = new Intent(MainActivity.this, IccActivity.class);
+        startActivity(intent);
     }
 
     public void onScannerClick(View view) {
