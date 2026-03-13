@@ -18,7 +18,7 @@ steps:
   persistCredentials: true
 
 - script: |
-    git config user.email pieter.beukes@altron.com"
+    git config user.email "pieter.beukes@altron.com"
     git config user.name "Azure DevOps Mirror Bot"
   displayName: 'Configure Git identity'
 
