@@ -1,0 +1,31 @@
+# Pipeline: Mirror master to GitHub on push
+trigger:
+  branches:
+    include:
+      - master
+
+pr: none  # Don't trigger on PR open/update, only on merge (push to master)
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  GITHUB_REPO: 'https://$(GITHUB_TOKEN)@github.com/AltronGroup/PTD-Urovo-Demo.git'  # Set GITHUB_TOKEN in pipeline secrets
+
+steps:
+- checkout: self
+  fetchDepth: 0        # Full history, not shallow clone
+  persistCredentials: true
+
+- script: |
+    git config user.email pieter.beukes@altron.com"
+    git config user.name "Azure DevOps Mirror Bot"
+  displayName: 'Configure Git identity'
+
+- script: |
+    git remote add github $(GITHUB_REPO) || git remote set-url github $(GITHUB_REPO)
+    git fetch origin master
+    git push github HEAD:master --force
+  displayName: 'Push master to GitHub'
+  env:
+    GITHUB_TOKEN: $(GITHUB_TOKEN)   # Mapped from secret variable
