@@ -1,8 +1,9 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,16 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Activity that demonstrates barcode and QR code scanning using the device camera.
+ * Uses CameraX for camera preview and ZXing library for barcode decoding.
+ * <p>
+ * This activity requests camera permissions, displays a live camera preview,
+ * and continuously analyzes frames to detect and decode barcodes/QR codes in real-time.
+ *
+ * @author Urovo Customer Demo Team
+ * @version 1.0
+ */
 public class CameraActivity extends AppCompatActivity {
 
     private PreviewView previewView;
@@ -35,6 +46,14 @@ public class CameraActivity extends AppCompatActivity {
     private ExecutorService cameraExecutor;
     private static final int CAMERA_REQUEST_CODE = 1001;
 
+    /**
+     * Called when the activity is starting. Initializes the UI components,
+     * creates a camera executor thread, and requests camera permissions if needed.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                          being shut down, this Bundle contains the most recent data.
+     *                          Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +74,12 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes and starts the camera for barcode scanning.
+     * Sets up camera preview, configures the back camera, and establishes
+     * an image analyzer that continuously scans for barcodes in the camera feed.
+     * Uses ZXing's MultiFormatReader to decode various barcode formats.
+     */
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
                 ProcessCameraProvider.getInstance(this);
@@ -107,7 +132,7 @@ public class CameraActivity extends AppCompatActivity {
                         } catch (NotFoundException ignored) {
                             // No barcode detected in this frame
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Log.e("CameraActivity", "Error analyzing barcode image", e);
                         } finally {
                             image.close();
                         }
@@ -118,18 +143,31 @@ public class CameraActivity extends AppCompatActivity {
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("CameraActivity", "Camera initialization failed", e);
                 Toast.makeText(this, "Camera init failed", Toast.LENGTH_SHORT).show();
             }
         }, ContextCompat.getMainExecutor(this));
     }
 
+    /**
+     * Called when the activity is being destroyed. Shuts down the camera executor
+     * service to release resources and prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         cameraExecutor.shutdown();
     }
 
+    /**
+     * Callback for the result from requesting permissions. Handles camera permission
+     * grant/denial. If permission is granted, starts the camera. If denied, shows
+     * a toast message and closes the activity.
+     *
+     * @param requestCode  The request code passed in requestPermissions()
+     * @param permissions  The requested permissions
+     * @param grantResults The grant results for the corresponding permissions
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,

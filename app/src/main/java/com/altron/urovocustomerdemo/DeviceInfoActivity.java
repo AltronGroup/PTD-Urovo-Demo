@@ -1,4 +1,4 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.device.DeviceManager;
 import android.os.Bundle;
@@ -11,14 +11,39 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View.OnClickListener;
 
-import com.coldstone.urovocustomerdemo.sdk.UrovoManager;
+import com.altron.urovocustomerdemo.sdk.UrovoManager;
 
+/**
+ * Activity that demonstrates device management and system information functionality.
+ * Provides examples of retrieving device information and controlling system settings
+ * on Urovo Android devices.
+ * <p>
+ * This activity shows how to:
+ * - Retrieve device serial numbers (SN and TUSN)
+ * - Set system time programmatically
+ * - Enable/disable home key and status bar
+ * - Configure APN settings for mobile networks
+ * - Install/uninstall applications programmatically
+ * - Check USB host (docker) state
+ *
+ * @author Urovo Customer Demo Team
+ * @version 1.0
+ */
 public class DeviceInfoActivity extends AppCompatActivity {
     DeviceManager mDevice;
     TextView SNTextView;
     TextView TUSNTextView;
     TextView DockerStateTextView;
 
+    /**
+     * Called when the activity is starting. Initializes the UI with edge-to-edge display,
+     * sets up the device manager, and configures click listeners for all device
+     * management operations.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                          being shut down, this Bundle contains the most recent data.
+     *                          Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +81,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 try {
                     // TODO Auto-generated method stub
                     String TUSNNumber = mDevice.getTIDSN();  //Get TUSN
-                    if (TUSNNumber.equals("")) {
+                    if (TUSNNumber.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT).show();
                     } else {
                         TUSNTextView.setText("TUSN:" + TUSNNumber);  //Display TUSN
@@ -181,7 +206,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 try {
                     // TODO Auto-generated method stub
                     String apkFile = "";   //For example:"/sdcard/demo.apk"
-                    if (apkFile.equals("")) {
+                    if (apkFile.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Installation package not found", Toast.LENGTH_SHORT).show();
                     } else {
                         mDevice.installApplication(apkFile);
@@ -200,7 +225,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 try {
                     // TODO Auto-generated method stub
                     String packageName = "";  //For example:"com.example.key"
-                    if (packageName.equals("")) {
+                    if (packageName.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "PackageName not found", Toast.LENGTH_SHORT).show();
                     } else {
                         mDevice.uninstallApplication(packageName);

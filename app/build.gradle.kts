@@ -3,18 +3,18 @@ plugins {
 }
 
 android {
-    namespace = "com.coldstone.urovocustomerdemo"
+    namespace = "com.altron.urovocustomerdemo"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.coldstone.urovocustomerdemo"
+        applicationId = "com.altron.urovocustomerdemo"
         minSdk = 27
         targetSdk = 36
-        versionCode = 1
+        versionCode = 2
         versionName = String.format("07.00.04.%04X",versionCode)
-        base.archivesName.set("urovo-customer-demo-$versionName")
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,6 +32,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+base {
+    archivesName.set("urovo-customer-demo-${android.defaultConfig.versionName}")
 }
 
 dependencies {

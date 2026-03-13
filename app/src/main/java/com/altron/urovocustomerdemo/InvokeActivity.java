@@ -1,8 +1,7 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +12,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,8 +28,6 @@ public class InvokeActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_invoke);
 
-
-        String sToolbarColor  = "#021E4D";
 
         Spinner spinner = findViewById(R.id.spinner);
 
@@ -105,8 +98,8 @@ public class InvokeActivity extends AppCompatActivity {
         launchIntent.putExtra("Operation", sCommand);
         Log.d("invokeDemo","Operation: " + sCommand);
         // Get the time
-        Long milliseconds = java.lang.System.currentTimeMillis();
-        String timeString = milliseconds.toString();
+        long milliseconds = java.lang.System.currentTimeMillis();
+        String timeString = Long.toString(milliseconds);
         launchIntent.putExtra("Time", timeString);
         Log.d("invokeDemo","Time: " + timeString);
         launchIntent.putExtra("Caller", "Caller Name");
@@ -122,7 +115,7 @@ public class InvokeActivity extends AppCompatActivity {
 
         //Use the new Int fields for Amount and Cashback
 
-        int iAmount = 0;
+        int iAmount;
         BigDecimal dParse;
         String amtStr;
         if (bAmount.getText().length() > 0) {
@@ -176,10 +169,19 @@ public class InvokeActivity extends AppCompatActivity {
         try {
             startActivityForResult(launchIntent, 1);
         } catch (Exception e) {
-            Log.d("InvokeDemo",e.getMessage());
+            String errorMsg = e.getMessage() != null ? e.getMessage() : "Unknown error";
+            Log.d("InvokeDemo", errorMsg);
         }
     }
 
+    /**
+     * Hashes a string using the specified message digest algorithm.
+     * Used to generate secure invocation keys for Cendroid authentication.
+     *
+     * @param type  The hash algorithm type (e.g., "SHA-1", "SHA-256", "SHA-512")
+     * @param input The input string to hash
+     * @return Hexadecimal string representation of the hash result
+     */
     private String hashString(String type,String input) {
         Log.d("ACS", "Hashing: " + input);
 
@@ -188,13 +190,13 @@ public class InvokeActivity extends AppCompatActivity {
         try {
             bytes = MessageDigest.getInstance(type).digest(input.getBytes());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            Log.e("InvokeActivity", "Hash algorithm not found: " + type, e);
         }
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < bytes.length; i++) {
-            sb.append(String.format("%02x",bytes[i]));
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
         }
 
         String messageDigest = sb.toString();
@@ -204,32 +206,42 @@ public class InvokeActivity extends AppCompatActivity {
         return messageDigest;
     }
 
+    /**
+     * Called when the Cendroid application returns a result. Parses the response
+     * bundle and displays transaction results including all payload data returned
+     * by Cendroid.
+     *
+     * @param requestCode The request code originally supplied to startActivityForResult()
+     * @param resultCode  The result code returned by the child activity (RESULT_OK or RESULT_CANCELED)
+     * @param data        An Intent that carries the result data (including the Payload bundle)
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         TextView txtView;
         txtView = findViewById(R.id.rxData);
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                String sTxt = "";
+            if(resultCode == Activity.RESULT_OK && data != null){
+                StringBuilder sb = new StringBuilder();
                 Bundle results = data.getExtras();
 
                 if (results != null) {
-
-                    Bundle payload = new Bundle();
-                    payload = results.getBundle("Payload");
-                    for (String key : payload.keySet()) {
-                        Log.d("Bundle Debug", key + " = \"" + payload.get(key) + "\"");
-                        sTxt += key + " = \"" + payload.get(key) + "\"" + "\n";
+                    Bundle payload = results.getBundle("Payload");
+                    if (payload != null) {
+                        for (String key : payload.keySet()) {
+                            Log.d("Bundle Debug", key + " = \"" + payload.get(key) + "\"");
+                            sb.append(key).append(" = \"").append(payload.get(key)).append("\"\n");
+                        }
                     }
                 }
-                if (sTxt.isEmpty() == false) {
+                String sTxt = sb.toString();
+                if (!sTxt.isEmpty()) {
                     txtView.setText(sTxt);
                 }
-                String result=data.getStringExtra("result");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
+                txtView.setText("Transaction cancelled");
             }
         }
     }//onActivityResult

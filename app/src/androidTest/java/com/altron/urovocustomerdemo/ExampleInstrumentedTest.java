@@ -1,4 +1,4 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.content.Context;
 
@@ -17,10 +17,14 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+    /**
+     * Tests that the application context has the correct package name.
+     * This verifies the app is running in the correct environment.
+     */
     @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.coldstone.urovocustomerdemo", appContext.getPackageName());
+        assertEquals("com.altron.urovocustomerdemo", appContext.getPackageName());
     }
 }

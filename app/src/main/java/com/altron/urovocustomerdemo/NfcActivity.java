@@ -1,8 +1,9 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.device.PiccManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -12,31 +13,59 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.coldstone.urovocustomerdemo.sdk.UrovoManager;
+import com.altron.urovocustomerdemo.sdk.UrovoManager;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Activity that demonstrates PICC (Proximity Integrated Circuit Card) / NFC reader functionality.
+ * Provides examples of contactless card operations including Mifare card reading, writing,
+ * authentication, and APDU command transmission for NFC/contactless smart cards.
+ * <p>
+ * This activity shows how to:
+ * - Open and initialize the PICC reader
+ * - Detect and check for contactless cards
+ * - Authenticate with Mifare cards using keys
+ * - Read and write data to specific blocks
+ * - Send APDU commands to contactless cards
+ * - Parse and display UID and card responses
+ *
+ * @author Urovo Customer Demo Team
+ * @version 1.0
+ */
 public class NfcActivity extends AppCompatActivity  implements View.OnClickListener {
     private static final String TAG = "NFCActivity";
 
+    /** Message code: Block number not provided */
     private static final int MSG_BLOCK_NO_NONE = 0;
+    /** Message code: Block number is illegal (out of range) */
     private static final int MSG_BLOCK_NO_ILLEGAL = 1;
+    /** Message code: Authentication failed */
     private static final int MSG_AUTHEN_FAIL = 2;
+    /** Message code: Write operation successful */
     private static final int MSG_WRITE_SUCCESS = 3;
+    /** Message code: Write operation failed */
     private static final int MSG_WRITE_FAIL = 4;
+    /** Message code: Read operation failed */
     private static final int MSG_READ_FAIL = 5;
+    /** Message code: Display block data */
     private static final int MSG_SHOW_BLOCK_DATA = 6;
+    /** Message code: Card activation failed */
     private static final int MSG_ACTIVE_FAIL = 7;
+    /** Message code: APDU operation failed */
     private static final int MSG_APDU_FAIL = 8;
+    /** Message code: Display APDU response */
     private static final int MSG_SHOW_APDU = 9;
+    /** Message code: Block data not provided */
     private static final int MSG_BLOCK_DATA_NONE = 10;
+    /** Message code: Authentication required before operation */
     private static final int MSG_AUTHEN_BEFORE = 11;
+    /** Message code: Card UID found */
     private static final int MSG_FOUND_UID = 12;
 
     private Button bOpen;
@@ -51,7 +80,7 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     private EditText AuthenKey;
     private TextView tvApdu;
 
-    private Handler handler;
+    private NfcHandler handler;
     private ExecutorService exec;
 
     boolean hasAuthen = false;
@@ -59,15 +88,18 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     int scanCard = -1;
     int SNLen = -1;
 
+    /** Default EMV APDU command for selecting payment system DDF */
     byte EMV_APDU[] = {
             0x00, (byte) 0xA4, 0x04, 0x00, 0x0E, 0x32, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53,
             0x2E, 0x44, 0x44, 0x46, 0x30, 0x31, 0x00
     };
 
+    /** Default Mifare authentication key (factory default: all 0xFF) */
     byte keyBuf[] = {
             (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff
     };
 
+    /** Sample data buffer for writing to Mifare cards */
     byte Wbuf[] = {
             0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d,
             0x0e, 0x0f
@@ -76,6 +108,91 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     PiccManager piccManager;
     UrovoManager urovoManager;
 
+    /**
+     * Static Handler class to prevent memory leaks.
+     * Uses WeakReference to avoid holding strong reference to Activity.
+     */
+    private static class NfcHandler extends Handler {
+        private final WeakReference<NfcActivity> activityRef;
+
+        NfcHandler(NfcActivity activity) {
+            super(Looper.getMainLooper());
+            this.activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            NfcActivity activity = activityRef.get();
+            if (activity == null) return;
+
+            switch (msg.what) {
+                case MSG_BLOCK_NO_NONE:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_block_no_none,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_BLOCK_NO_ILLEGAL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_block_no_illegal,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_AUTHEN_FAIL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_authen_fail,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_AUTHEN_BEFORE:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_authen_before,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_WRITE_SUCCESS:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_write_success,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_WRITE_FAIL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_write_fail,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_READ_FAIL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_read_fail,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_APDU_FAIL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_operate_fail,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_BLOCK_DATA_NONE:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_block_data_none,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_SHOW_BLOCK_DATA:
+                    String data = (String) msg.obj;
+                    activity.tvApdu.append("\n" + data);
+                    break;
+                case MSG_ACTIVE_FAIL:
+                    Toast.makeText(activity.getApplicationContext(), R.string.picc_active_fail,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MSG_SHOW_APDU:
+                    String apdu = (String) msg.obj;
+                    activity.tvApdu.append("\nAPDU:" + apdu);
+                    break;
+                case MSG_FOUND_UID:
+                    String uid = (String) msg.obj;
+                    activity.tvApdu.append("\nUID:" + uid);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Called when the activity is starting. Initializes the UI with edge-to-edge display,
+     * sets up the PICC manager, creates an executor service for background operations,
+     * and configures a handler for processing PICC operation messages.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                          being shut down, this Bundle contains the most recent data.
+     *                          Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,71 +201,12 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
         urovoManager = UrovoManager.getInstance(this);
         piccManager = urovoManager.getPicc();
         exec = Executors.newSingleThreadExecutor();
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                // TODO Auto-generated method stub
-                switch (msg.what) {
-                    case MSG_BLOCK_NO_NONE:
-                        Toast.makeText(getApplicationContext(), R.string.picc_block_no_none,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_BLOCK_NO_ILLEGAL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_block_no_illegal,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_AUTHEN_FAIL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_authen_fail,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_AUTHEN_BEFORE:
-                        Toast.makeText(getApplicationContext(), R.string.picc_authen_before,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_WRITE_SUCCESS:
-                        Toast.makeText(getApplicationContext(), R.string.picc_write_success,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_WRITE_FAIL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_write_fail,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_READ_FAIL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_read_fail,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_APDU_FAIL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_operate_fail,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_BLOCK_DATA_NONE:
-                        Toast.makeText(getApplicationContext(), R.string.picc_block_data_none,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_SHOW_BLOCK_DATA:
-                        String data = (String) msg.obj;
-                        tvApdu.append("\n" + data);
-                        break;
-                    case MSG_ACTIVE_FAIL:
-                        Toast.makeText(getApplicationContext(), R.string.picc_active_fail,
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case MSG_SHOW_APDU:
-                        String apdu = (String) msg.obj;
-                        tvApdu.append("\nAPDU:" + apdu);
-                        break;
-                    case MSG_FOUND_UID:
-                        String uid = (String) msg.obj;
-                        tvApdu.append("\nUID:" + uid);
-                        break;
-                    default:
-                        break;
-                }
-                super.handleMessage(msg);
-            }
-        };
+        handler = new NfcHandler(this);
     }
 
+    /**
+     * Called when the activity is about to become visible. Initializes the UI views.
+     */
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
@@ -156,6 +214,9 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
         super.onResume();
     }
 
+    /**
+     * Initializes all UI components and sets up click listeners for buttons.
+     */
     private void initView() {
         bOpen = (Button) findViewById(R.id.picc_open);
         bCheck = (Button) findViewById(R.id.picc_check);
@@ -177,15 +238,13 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     }
 
     /**
-     * Check if a (hex) string is pure hex (0-9, A-F, a-f) and 16 byte
-     * (32 chars) long. If not show an error Toast in the context.
+     * Validates that a string contains only hexadecimal characters (0-9, A-F, a-f).
+     *
+     * @param hexString The string to validate
+     * @return true if the string is valid hex, false otherwise
      */
     public static boolean isHexAnd16Byte(String hexString) {
-        if (hexString.matches("[0-9A-Fa-f]+") == false) {
-            // Error, not hex.
-            return false;
-        }
-        return true;
+        return hexString.matches("[0-9A-Fa-f]+");
     }
 
     @Override
@@ -201,7 +260,6 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
                         tvApdu.append("\n Open success");
                     } else {
                         tvApdu.append("Open failed \n");
-                        return;
                     }
                 }
             }, "picc open"));
@@ -232,19 +290,19 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
                 @Override
                 public void run() {
                     String str = etBlockNo.getText().toString();
-                    if (str == null || str.equals("")) {
+                    if (str.isEmpty()) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_NONE);
                         return;
                     }
-                    blkNo = Integer.valueOf(str);
+                    blkNo = Integer.parseInt(str);
                     if (blkNo < 0 || blkNo > 63) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_ILLEGAL);
                         return;
                     }
-                    int ret = -1;
+                    int ret;
                     byte SN[] = new byte[10];
                     String key = AuthenKey.getText().toString();
-                    if (!key.equals("") && isHexAnd16Byte(key)) {
+                    if (!key.isEmpty() && isHexAnd16Byte(key)) {
                         byte[] keyData = hexStringToBytes(key);
                         ret = piccManager.m1_keyAuth(0, blkNo, keyData.length, keyData, SNLen, SN);
                     } else {
@@ -268,11 +326,11 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
                         return;
                     }
                     String str = etBlockNo.getText().toString();
-                    if (str == null || str.equals("")) {
+                    if (str.isEmpty()) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_NONE);
                         return;
                     }
-                    blkNo = Integer.valueOf(str);
+                    blkNo = Integer.parseInt(str);
                     if (blkNo < 0 || blkNo > 63) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_ILLEGAL);
                         return;
@@ -300,17 +358,17 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
                         return;
                     }
                     String str = etBlockNo.getText().toString();
-                    if (str == null || str.equals("")) {
+                    if (str.isEmpty()) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_NONE);
                         return;
                     }
-                    blkNo = Integer.valueOf(str);
+                    blkNo = Integer.parseInt(str);
                     if (blkNo < 0 || blkNo > 63) {
                         handler.sendEmptyMessage(MSG_BLOCK_NO_ILLEGAL);
                         return;
                     }
                     String data = etBlockData.getText().toString();
-                    if (data == null || data.equals("") || !isHexAnd16Byte(data)) {
+                    if (data.isEmpty() || !isHexAnd16Byte(data)) {
                         handler.sendEmptyMessage(MSG_BLOCK_DATA_NONE);
                         return;
                     }
@@ -340,9 +398,9 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
                     }
                     String art = bytesToHexString(atr, ret);
                     Log.d("debug", ret + " atr " + art);
-                    int result = -1;
+                    int result;
                     String reception = Emission.getText().toString();
-                    if (!reception.equals("") && isHexAnd16Byte(reception)) {
+                    if (!reception.isEmpty() && isHexAnd16Byte(reception)) {
                         byte[] apdu = hexStringToByteArray(reception);
                         result = piccManager.apduTransmit(apdu, apdu.length, readBuf, sw);   //Desfire Card piccReader.apduTransmit(apdu, apdu.length, read_buf);
                     } else {
@@ -365,6 +423,9 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     protected void onDestroy() {
         // TODO Auto-generated method stub
         exec.shutdown();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
         super.onDestroy();
     }
 
@@ -391,7 +452,7 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
     }
 
     public static String bytesToHexString(byte[] src, int len) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
         }
@@ -409,8 +470,14 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
         return stringBuilder.toString();
     }
 
+    /**
+     * Converts a hexadecimal string to a byte array.
+     *
+     * @param hexString The hex string to convert
+     * @return A byte array representing the hex values, or null if input is invalid
+     */
     public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
+        if (hexString == null || hexString.isEmpty()) {
             return null;
         }
         hexString = hexString.toUpperCase();
@@ -424,10 +491,19 @@ public class NfcActivity extends AppCompatActivity  implements View.OnClickListe
         return d;
     }
 
+    /**
+     * Converts a hexadecimal character to its byte value.
+     *
+     * @param c The hexadecimal character (0-9, A-F)
+     * @return The byte value of the character
+     */
     private static byte charToByte(char c) {
         return (byte) "0123456789ABCDEF".indexOf(c);
     }
 
+    /**
+     * Called when the activity is no longer visible. Releases PICC hardware resources.
+     */
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub

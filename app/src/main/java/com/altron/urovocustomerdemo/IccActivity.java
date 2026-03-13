@@ -1,4 +1,4 @@
-package com.coldstone.urovocustomerdemo;
+package com.altron.urovocustomerdemo;
 
 import android.device.IccManager;
 import android.os.Bundle;
@@ -10,12 +10,23 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.coldstone.urovocustomerdemo.sdk.UrovoManager;
+import com.altron.urovocustomerdemo.sdk.UrovoManager;
 
+/**
+ * Activity that demonstrates ICC (Integrated Circuit Card) smart card reader functionality.
+ * Provides examples of card detection, initialization, reset, and APDU command transmission
+ * for interacting with smart cards (chip cards).
+ * <p>
+ * This activity shows how to:
+ * - Initialize and detect ICC cards
+ * - Reset cards and retrieve ATR (Answer To Reset)
+ * - Send APDU commands to smart cards
+ * - Parse and display card responses
+ *
+ * @author Urovo Customer Demo Team
+ * @version 1.0
+ */
 public class IccActivity extends AppCompatActivity {
     private static final String TAG = "ICCActivity";
     UrovoManager urovoManager;
@@ -30,11 +41,20 @@ public class IccActivity extends AppCompatActivity {
 
     EditText mEmission;
 
+    /** Default APDU command for selecting payment system DDF */
     byte[] apduUtf = {
             0x00, (byte) 0xA4, 0x04, 0x00, 0x0E, 0x31, 0x50, 0x41, 0x59, 0x2E, 0x53,
             0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31, 0x00
     };
 
+    /**
+     * Called when the activity is starting. Initializes the UI with edge-to-edge display,
+     * sets up the ICC manager, and configures click listeners for all ICC operations.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                          being shut down, this Bundle contains the most recent data.
+     *                          Otherwise it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +74,7 @@ public class IccActivity extends AppCompatActivity {
                 String reception = mEmission.getText().toString();
                 Log.i("debug", "onEditorAction:" + reception);
 
-                if (!reception.equals("")) {
+                if (!reception.isEmpty()) {
                     if (isHexAnd16Byte(reception)) {
                         mNo.append("SEND: " + reception + "\n");
                         byte[] apdu = hexStringToByteArray(reception);
@@ -134,7 +154,7 @@ public class IccActivity extends AppCompatActivity {
     }
 
     public boolean isHexAnd16Byte(String hexString) {
-        if (hexString.matches("[0-9A-Fa-f]+") == false) {
+        if (!hexString.matches("[0-9A-Fa-f]+")) {
             // Error, not hex.
             Toast.makeText(getApplicationContext(), "Error: Data must be in hexadecimal(0-9 and A-F)",
                     Toast.LENGTH_LONG).show();
@@ -159,7 +179,7 @@ public class IccActivity extends AppCompatActivity {
     }
 
     public static String bytesToHexString(byte[] src, int offset, int length) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
         }
@@ -174,12 +194,19 @@ public class IccActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
+    /**
+     * Called when the activity is being destroyed. Releases resources.
+     */
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
     }
 
+    /**
+     * Called when the activity is no longer visible. Deactivates the ICC card
+     * to release the card reader hardware.
+     */
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub
