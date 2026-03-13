@@ -2,7 +2,7 @@
 trigger:
   branches:
     include:
-      - master
+      - main
 
 pr: none  # Don't trigger on PR open/update, only on merge (push to master)
 
@@ -24,8 +24,8 @@ steps:
 
 - script: |
     git remote add github $(GITHUB_REPO) || git remote set-url github $(GITHUB_REPO)
-    git fetch origin master
-    git push github HEAD:master --force
-  displayName: 'Push master to GitHub'
+    git fetch origin main
+    git push github HEAD:main --force
+  displayName: 'Push main to GitHub'
   env:
     GITHUB_TOKEN: $(GITHUB_TOKEN)   # Mapped from secret variable
