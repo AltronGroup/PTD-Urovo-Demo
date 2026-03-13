@@ -40,7 +40,8 @@ tools:context=".NfcActivity">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picc_open"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
 
             <Button
                 android:id="@+id/picc_check"
@@ -48,7 +49,8 @@ tools:context=".NfcActivity">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picc_check"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
         </LinearLayout>
 
         <LinearLayout
@@ -73,7 +75,8 @@ tools:context=".NfcActivity">
                 android:layout_width="88dp"
                 android:layout_height="match_parent"
                 android:text="@string/picc_def_apdu"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
         </LinearLayout>
 
         <ImageView
@@ -114,7 +117,8 @@ tools:context=".NfcActivity">
                 android:layout_width="88dp"
                 android:layout_height="match_parent"
                 android:text="@string/picc_authen"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
         </LinearLayout>
 
         <LinearLayout
@@ -138,7 +142,8 @@ tools:context=".NfcActivity">
                 android:layout_width="88dp"
                 android:layout_height="match_parent"
                 android:text="@string/picc_read_block"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
         </LinearLayout>
 
         <LinearLayout
@@ -162,7 +167,8 @@ tools:context=".NfcActivity">
                 android:layout_width="88dp"
                 android:layout_height="match_parent"
                 android:text="@string/picc_write_block"
-                android:textSize="20sp"></Button>
+                android:textSize="20sp"
+                android:backgroundTint="#1F4659"></Button>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

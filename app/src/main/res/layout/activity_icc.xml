@@ -28,20 +28,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_init_ic" />
+        android:text="@string/btn_init_ic"
+        android:backgroundTint="#1F4659" />
     <Button
         android:id="@+id/btn_detect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_detect" />
+        android:text="@string/btn_detect"
+        android:backgroundTint="#1F4659" />
     <Button
         android:id="@+id/btn_init_sle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/btn_init_sle4442"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:backgroundTint="#1F4659" />
 
 </LinearLayout>
 <LinearLayout
@@ -53,13 +56,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_reset" />
+        android:text="@string/btn_reset"
+        android:backgroundTint="#1F4659" />
     <Button
         android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_def_apdu" />
+        android:text="@string/btn_def_apdu"
+        android:backgroundTint="#1F4659" />
 
 </LinearLayout>
 <LinearLayout
@@ -81,7 +86,8 @@
         android:id="@+id/button1"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="@string/btn_send" />
+        android:text="@string/btn_send"
+        android:backgroundTint="#1F4659" />
 </LinearLayout>
 
 <LinearLayout
@@ -94,13 +100,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_def_apdu" />
+        android:text="@string/btn_def_apdu"
+        android:backgroundTint="#1F4659" />
     <Button
         android:id="@+id/button5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_reset" />
+        android:text="@string/btn_reset"
+        android:backgroundTint="#1F4659" />
 </LinearLayout>
 <LinearLayout
     android:layout_width="fill_parent"
@@ -112,12 +120,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_def_apdu" />
+        android:text="@string/btn_def_apdu"
+        android:backgroundTint="#1F4659" />
     <Button
         android:id="@+id/button7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/btn_reset" />
+        android:text="@string/btn_reset"
+        android:backgroundTint="#1F4659" />
 </LinearLayout>
 </tools:LinearLayout>

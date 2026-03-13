@@ -139,13 +139,14 @@ public class PrinterActivity extends AppCompatActivity {
     }
 
     /**
-     * Handles click event for the exit button. Closes the printer activity
-     * and returns to the main menu.
+     * Handles click event for the back button. Returns to MainActivity
+     * using the back navigation stack.
      *
      * @param view The view that was clicked
      */
-    public void onExitClick(View view) {
-        finish();
+    public void onBackClick(View view) {
+        // Use the back button behavior which properly navigates to parent activity
+        getOnBackPressedDispatcher().onBackPressed();
     }
 
     /**

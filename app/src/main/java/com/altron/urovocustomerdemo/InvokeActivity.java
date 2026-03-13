@@ -51,7 +51,8 @@ public class InvokeActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
-        finish();
+        // Use the back button behavior which properly navigates to parent activity
+        getOnBackPressedDispatcher().onBackPressed();
     }
     public void executeInvoke(View view) {
         Spinner spinner = findViewById(R.id.spinner);

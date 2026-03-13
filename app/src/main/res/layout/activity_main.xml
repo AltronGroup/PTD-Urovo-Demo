@@ -29,7 +29,8 @@
             android:id="@+id/btnPrinter"
             android:text="Printer"
             android:onClick="onPrinterClick"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#1F4659"/>
 
         <Button
             android:layout_width="0dp"
@@ -38,7 +39,8 @@
             android:text="Scanner"
             android:id="@+id/btnScanner"
             android:onClick="onScannerClick"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#1F4659"/>
     </LinearLayout>
 
     <!-- Row 2 -->
@@ -55,7 +57,8 @@
             android:text="ICC"
             android:onClick="onIccClick"
             android:id="@+id/btnIcc"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#1F4659"/>
 
         <Button
             android:layout_width="0dp"
@@ -64,7 +67,8 @@
             android:text="MAG"
             android:onClick="onMagClick"
             android:id="@+id/btnMag"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#1F4659"/>
     </LinearLayout>
 
     <!-- Row 3 -->
@@ -81,7 +85,8 @@
             android:text="PICC"
             android:onClick="onPiccClick"
             android:id="@+id/btnPicc"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#1F4659"/>
 
         <Button
             android:layout_width="0dp"
@@ -90,7 +95,8 @@
             android:text="Device Manager"
             android:id="@+id/btnDeviceManager"
             android:onClick="onDeviceManagerClick"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#1F4659"/>
     </LinearLayout>
 
     <!-- Row 4 -->
@@ -105,7 +111,8 @@
             android:layout_weight="1"
             android:text="Invoke"
             android:onClick="onInvokeClick"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#1F4659"/>
 
         <Button
             android:layout_width="0dp"
@@ -113,7 +120,8 @@
             android:layout_weight="1"
             android:text="Exit"
             android:onClick="onExitClick"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#1F4659"/>
     </LinearLayout>
 
 </LinearLayout>

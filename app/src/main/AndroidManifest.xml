@@ -14,31 +14,38 @@
         <activity
             android:name=".CameraActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".DeviceInfoActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".InvokeActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".NfcActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".IccActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".MagActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".PrinterActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.UrovoCustomerDemo.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

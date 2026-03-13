@@ -122,7 +122,8 @@ public class MagActivity extends AppCompatActivity {
             magReaderThread.stopMagReader();
             magReaderThread = null;
         }
-        finish();
+        // Use the back button behavior which properly navigates to parent activity
+        getOnBackPressedDispatcher().onBackPressed();
     }
 
     /**

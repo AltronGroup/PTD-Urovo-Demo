@@ -179,7 +179,8 @@ public class CameraActivity extends AppCompatActivity {
                 startCamera();
             } else {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
-                finish();
+                // Use the back button behavior which properly navigates to parent activity
+                getOnBackPressedDispatcher().onBackPressed();
             }
         }
     }

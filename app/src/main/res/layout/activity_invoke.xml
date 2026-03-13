@@ -129,7 +129,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="executeInvoke"
-            android:text="Execute Invoke" />
+            android:text="Execute Invoke"
+            android:backgroundTint="#1F4659" />
 
     </LinearLayout>
 
@@ -175,6 +176,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         android:onClick="goBack"
-        android:text="Back" />
+        android:text="Back"
+        android:backgroundTint="#1F4659" />
 
 </RelativeLayout>

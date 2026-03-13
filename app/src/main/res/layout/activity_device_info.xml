@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="getDeviceId"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="#1F4659" />
 
     </LinearLayout>
 
@@ -49,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="getTUSN(POS)"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="#1F4659" />
 
     </LinearLayout>
 
@@ -60,7 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:text="setCurrentTime(Add one hour and one minute)"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="#1F4659" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -97,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="enableStatusBar"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="#1F4659" />
 
         <Button
             android:id="@+id/button5_1"
@@ -105,7 +109,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="disableStatusBar"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="#1F4659" />
 
     </LinearLayout>
 
@@ -115,7 +120,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:text="setAPN"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="#1F4659" />
 
 
     <Button
@@ -124,7 +130,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="installApplication"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="#1F4659" />
 
     <Button
         android:id="@+id/button8"
@@ -132,7 +139,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="uninstallApplication"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:backgroundTint="#1F4659" />
 
 
     <LinearLayout
@@ -154,7 +162,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="getDockerState"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:backgroundTint="#1F4659" />
 
     </LinearLayout>
 
